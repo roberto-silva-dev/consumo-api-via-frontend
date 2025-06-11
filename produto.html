@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Produto</title>
+</head>
+<body>
+  <h1 id="form-title">Cadastrar Produto</h1>
+  <form id="produto-form">
+    <input type="text" name="nome" placeholder="Nome" required /><br>
+    <textarea name="descricao" placeholder="Descrição"></textarea><br>
+    <input type="number" name="preco" placeholder="Preço" step="0.01" required /><br>
+    <button type="submit">Salvar</button>
+  </form>
+
+  <script>
+    const API_URL = 'https://produtos.apps.robertosilva.dev/api';
+    const form = document.getElementById("produto-form");
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    if (id) {
+      console.log('Aquiii', id);
+      fetch(`${API_URL}/produtos/${id}/`)
+        .then(res => res.json())
+        .then(produto => {
+          document.querySelector("input[name=nome]").value = produto.nome;
+          document.querySelector("textarea[name=descricao]").value = produto.descricao;
+          document.querySelector("input[name=preco]").value = produto.preco;
+          document.getElementById("form-title").textContent = "Editar Produto";
+        });
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+
+      fetch(`${API_URL}/produtos/${id ? id + '/' : ''}`, {
+        method: id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).then(() => window.location.href = "index.html");
+    });
+  </script>
+</body>
+</html>
