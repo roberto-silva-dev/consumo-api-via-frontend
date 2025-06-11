@@ -66,6 +66,7 @@ Este projeto frontend usa HTML, CSS e JavaScript puro para consumir uma API Djan
   </form>
 
   <script>
+    const API_URL = 'https://produtos.apps.robertosilva.dev/api';
     const form = document.getElementById("produto-form");
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
